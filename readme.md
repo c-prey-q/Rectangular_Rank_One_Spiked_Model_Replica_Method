@@ -6,9 +6,7 @@ Given the computational intensity of the saddle point analysis, the recommended 
 
 The core of the project consists of three primary scripts:
 
-1. Main_SE_RM.m implements the iterative solution for the saddle point equations, supporting four distinct noise scenarios (Rademacher, Gaussian, Quadratic, and Jacobi) across three signal priors (Rademacher, Two-point, and Gauss-Bernoulli).
-
-This script also integrates a PCA implementation specifically tailored for the Rademacher rotationally invariant noise case, following the theoretical foundations established in [1].
+1. Main_SE_RM.m implements the iterative solution for the saddle point equations, supporting four distinct noise scenarios (Rademacher, Gaussian, Quadratic, and Jacobi) across three signal priors (Rademacher, Two-point, and Gauss-Bernoulli). This script also integrates a PCA implementation specifically tailored for the Rademacher rotationally invariant noise case, following the theoretical foundations established in [1].
 
 2. Saddle_Point_Equation.m performs a fine-grained grid search of the saddle point equations; however, users should note that this approach entails significantly higher computational complexity.
 
