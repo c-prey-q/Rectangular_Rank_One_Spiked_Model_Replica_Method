@@ -1,6 +1,3 @@
-clear;
-clc;
-close all;
 warning('off', 'MATLAB:integral:NonFiniteValue');
 warning('off', 'MATLAB:fzero:NAx');
 

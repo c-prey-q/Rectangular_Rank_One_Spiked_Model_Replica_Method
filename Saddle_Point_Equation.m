@@ -84,6 +84,12 @@ Para.Interval = Interval;
 
 Str = [ Str, 'I-', num2str(Interval) ];
 
+Q_Num = 120;
+Q_Contour = 256;
+
+Para.Q_Num = Q_Num;
+Para.Q_Contour = Q_Contour;
+
 tmp = 1e-5;
 
 W_U_Array = linspace(0 + tmp, 1 - tmp, Interval);
@@ -751,90 +757,5 @@ function Index_Array = Find_Position(Residual)
 	[Row_Array, Col_Array] = find(Is_Min);
 
 	Index_Array = [Row_Array'; Col_Array'];
-
-end
-
-function Res = Compute_Free_Energy(Para, Lambda, w_u, w_v, m_u, m_v)
-
-	EPS = Para.EPS;
-
-	Alpha = Para.Alpha;
-
-	X_Min = Para.X_Min;
-	X_Max = Para.X_Max;
-	Rho = Para.Rho;
-	H = Para.H;
-	S0 = Para.S0;
-
-	E_Log_P_U = Para.E_Log_P_U;
-	E_Log_P_V = Para.E_Log_P_V;
-
-	w_u = max( EPS, min(1 - EPS, w_u) );
-	w_v = max( EPS, min(1 - EPS, w_v) );
-
-	hm_u = w_u / max(EPS, 1 - w_u);
-	hm_v = w_v / max(EPS, 1 - w_v);
-
-	hm_u = max(EPS, hm_u);
-	hm_v = max(EPS, hm_v);
-
-	mmse_u = 1 - m_u;
-	mmse_v = 1 - m_v;
-
-	mmse_u = max(EPS, mmse_u);
-	mmse_v = max(EPS, mmse_v);
-
-	rho_u = 1 / max(EPS, mmse_u) - 1 / max(EPS, 1 - w_u);
-	rho_u = max(EPS, rho_u);
-
-	rho_v = 1 / max(EPS, mmse_v) - 1 / max(EPS, 1 - w_v);
-	rho_v = max(EPS, rho_v);
-
-	% tm_u = hm_u - m_u / max(EPS, 1 - m_u);
-	% tm_v = hm_v - m_v / max(EPS, 1 - m_v);
-
-	tm_u = - rho_u;
-	tm_v = - rho_v;
-
-	J_UU = @ (x) Lambda^(2) * pi^(2) * x .* ( ( Rho(x) ).^(2) + ( H(x) ).^(2) ) + ...
-	(Alpha - 1) * Lambda^(2) * 2 * pi * H(x) + ...
-	(Alpha - 1)^(2) * Lambda^(2) * 1 ./ x;
-
-	J_VV = @ (x) Lambda^(2) * pi^(2) * x .* ( ( Rho(x) ).^(2) + ( H(x) ).^(2) );
-
-	J_UV = @ (x) Lambda^(2) * 4 * pi^(2) * x .* ( H(x) ).^(2) + ...
-	(Alpha - 1) * Lambda^(2) * 4 * pi * H(x) + ...
-	(Alpha - 1)^(2) * Lambda^(2) * 1 ./ x;
-
-	a_V = - (Alpha - 1) * Lambda^(2) * S0;
-
-	TG_U = @ (x) 1 - tm_u + J_UU(x);
-	TG_V = @ (x) 1 - tm_v + J_VV(x);
-
-	TG_V0 = 1 - tm_v + a_V;
-
-	F_ON = @ (x) tm_v - ( 1 - TG_V(x) ).^(2) + ( ...
-		( tm_u - ( 1 - TG_U(x) ).^(2) ) .* J_UV(x) ...
-	) ./ ( TG_U(x) ).^(2);
-
-	F_OD = @ (x) TG_V(x) - J_UV(x) ./ TG_U(x);
-
-	Res = - 1 / ( 2 * (1 - m_u) ) ...
-	- Alpha / ( 2 * (1 - m_v) ) ...
-	- 1 / 2 * log(1 - m_u) ...
-	- Alpha / 2 * log(1 - m_v) ...
-	+ E_Log_P_U(w_u) ...
-	+ Alpha * E_Log_P_V(w_v) ...
-	- 1 / 2 * integral( @ (x) ...
-		Rho(x) .* ( ...
-			log( TG_U(x) ) ...
-			+ ( tm_u - ( 1 - TG_U(x) ).^(2) ) ./ TG_U(x) ...
-			+ F_ON(x) ./ F_OD(x) ...
-			+ log( F_OD(x) ) ...
-		) ...
-	, X_Min, X_Max ) ...
-	- (Alpha - 1) / 2 * ( ...
-		log(TG_V0) + ( tm_v - (1 - TG_V0)^(2) ) / TG_V0 ...
-	);
 
 end
