@@ -14,4 +14,6 @@ The core of the project consists of three primary scripts:
 
 4. Compute_Free_Energy.m evaluates the replica free entropy for each candidate saddle point obtained from the grid search.
 
+5. Main_Spec_Rach_UV.m implements the OAMP algorithm and its associated state-evolution recursion for the rectangular spiked matrix model with Rademacher rotationally invariant noise.
+
 [1] Chen H, Liu S, Ma J. Orthogonal Approximate Message Passing with Optimal Spectral Initializations for Rectangular Spiked Matrix Models[J]. arXiv preprint arXiv:2512.19334, 2025.
