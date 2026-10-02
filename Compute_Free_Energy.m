@@ -144,14 +144,9 @@ function Grid = Build_Grid(Para)
 	Yte_Lt = Center + R * exp(1i * Te_Lt);
 	Dyte_Lt = 1i * R * exp(1i * Te_Lt);
 
-	Xte_P_Lt = sqrt(Yte_Lt);
-	Xte_M_Lt = - Xte_P_Lt;
+	Xte_Lt = sqrt(Yte_Lt);
 
-	Cw_P_Lt = 1 / (2 * pi * 1i) * Dte * Dyte_Lt ./ (2 * Xte_P_Lt);
-	Cw_M_Lt = 1 / (2 * pi * 1i) * Dte * Dyte_Lt ./ (2 * Xte_M_Lt);
-
-	Xte_Lt = [Xte_P_Lt; Xte_M_Lt];
-	Cw_Lt = [Cw_P_Lt; Cw_M_Lt];
+	Cw_Lt = 1 / (2 * pi * 1i) * Dte * Dyte_Lt ./ (2 * Xte_Lt);
 
 	Grid.Xte_Lt = Xte_Lt;
 	Grid.Cw_Lt = Cw_Lt;
@@ -279,8 +274,8 @@ function [Pack, Data] = Forward_Pass(Para, Lambda, FP, Grid, x_I)
 	a_vv_0 = - Alpha / TG_V0 * tm_v_0;
 
 	% Q_Num = 120;
-    % Q_Contour = 256;
-    % 2 * Q_Contour x Q_Num
+	% Q_Contour = 256;
+	% Q_Contour x Q_Num
 	Den_Lt = Xte_Lt.^(2) - (S_Lt.').^(2);
 	Xte_Den_Lt = Xte_Lt ./ Den_Lt;
 	S_Den_Lt = S_Lt.' ./ Den_Lt;
